@@ -122,19 +122,13 @@ def embed_passo_4() -> discord.Embed:
             "### Ranks\n"
             "Nosso sistema de ranks é baseado no progresso da sua conta, medido por Horas Jogadas (EHP), "
             "Horas de Boss (EHB) e marcos importantes no jogo, como Quest Cape e Achievement Diary Cape. "
-            "Também contamos com ranks especiais para os MVPs do mês e Colaboradores.\n"
-            "<#1253747276564660296>\n"
+            "Também contamos com ranks especiais para os MVPs do mês e Colaboradores.\n\n"
+            "Peça seu rank aqui nesse ticket mesmo ou abra outro em:\n"
+            "<#1253747276564660296>"
         ),
         color=65336,
     )
     e.set_image(url="https://i.imgur.com/x70WCFP.png")
-    e.add_field(
-        name="Para novos membros:",
-        value=(
-            "<:atencao:1303805885109371021> É necessário estar no clã há pelo menos **30 dias** "
-            "para poder solicitar seu primeiro rank.\n"
-        ),
-    )
     return e
 
 def embed_final() -> discord.Embed:
@@ -266,11 +260,27 @@ class FinalView(discord.ui.View):
                 "Apenas quem abriu o ticket pode clicar neste botão.", ephemeral=True
             )
             return
-        # Remove os botões
-        await interaction.response.edit_message(view=None)
+        # Mantém o botão Voltar ativo, desativa o Concluir
+        view = discord.ui.View(timeout=None)
+        back = discord.ui.Button(
+            label="← Voltar",
+            style=discord.ButtonStyle.secondary,
+            custom_id=f"tut_back_final_{self.user_id}",
+        )
+        back.callback = self._back_cb
+        view.add_item(back)
+        done_disabled = discord.ui.Button(
+            label="Concluir ✓",
+            style=discord.ButtonStyle.success,
+            custom_id=f"tut_done_disabled_{self.user_id}",
+            disabled=True,
+        )
+        view.add_item(done_disabled)
+        await interaction.response.edit_message(view=view)
         # Pinga o staff
         await interaction.channel.send(
-            f"<@&{STAFF_ROLE_ID}> — <@{self.user_id}> concluiu as etapas e está pronto para o apply! ✅"
+            f"<@&{STAFF_ROLE_ID}> — <@{self.user_id}> Você concluiu as etapas iniciais e já está pronto para o apply!\n"
+            "Enquanto aguarda, utilize esse tempo para concluir o passo a passo e deixar seus plugins instalados e configurados."
         )
         log.info(f"Staff pingado para usuário {self.user_id}")
 
