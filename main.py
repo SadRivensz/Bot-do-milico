@@ -279,7 +279,7 @@ class FinalView(discord.ui.View):
         await interaction.response.edit_message(view=view)
         # Pinga o staff
         await interaction.channel.send(
-            f"<@&{STAFF_ROLE_ID}> — <@{self.user_id}> Você concluiu as etapas iniciais e já está pronto para o apply!\n"
+            f"<@&{STAFF_ROLE_ID}> — <@{self.user_id}> concluiu as etapas iniciais e já está pronto para o apply!\n"
             "Enquanto aguarda, utilize esse tempo para concluir o passo a passo e deixar seus plugins instalados e configurados."
         )
         log.info(f"Staff pingado para usuário {self.user_id}")
